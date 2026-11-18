@@ -143,9 +143,11 @@ async function startServer() {
 
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`Backend running on port ${PORT}`);
+      console.log(`Environment: ${process.env.NODE_ENV}`);
     });
+
   } catch (error) {
-    console.error('Backend startup failed:', error.message);
+    console.error('Server startup failed:', error.message);
     process.exit(1);
   }
 }
