@@ -19,34 +19,67 @@ const {
 } = require('./middleware/errorMiddleware');
 
 const app = express();
+
 const PORT = Number(process.env.PORT) || 5000;
+const isProduction = process.env.NODE_ENV === 'production';
 
+// ==========================================
+// SERVER CONFIGURATION
+// ==========================================
 
+app.disable('x-powered-by');
 
+app.set(
+  'trust proxy',
+  Number(process.env.TRUST_PROXY || 0)
+);
 
-const allowedOrigins = (
-  process.env.CLIENT_URLS || ''
-)
+// ==========================================
+// ALLOWED ORIGINS
+// ==========================================
+
+const allowedOrigins = (process.env.CLIENT_URLS || '')
   .split(',')
-  .map((origin) => origin.trim())
+  .map((origin) => origin.trim().replace(/\/+$/, ''))
   .filter(Boolean);
 
-const corsOptions = {
-  origin: (origin, callback) => {
-    // Allow requests without an Origin header,
-    // such as backend health checks.
-    if (!origin) {
-      return callback(null, true);
-    }
+// Allow local development only in development mode.
+if (!isProduction) {
+  allowedOrigins.push(
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'http://127.0.0.1:5173',
+    'http://127.0.0.1:5174'
+  );
+}
 
-    if (allowedOrigins.includes(origin)) {
+const uniqueOrigins = [...new Set(allowedOrigins)];
+
+console.log('Allowed origins:', uniqueOrigins);
+
+// ==========================================
+// SECURITY
+// ==========================================
+
+app.use(helmet());
+
+// ==========================================
+// CORS CONFIGURATION
+// ==========================================
+
+const corsOptions = {
+  origin(origin, callback) {
+    console.log('Incoming origin:', origin || 'No origin');
+
+    if (!origin || uniqueOrigins.includes(origin)) {
       return callback(null, true);
     }
 
     console.error('CORS blocked origin:', origin);
 
-    const error = new Error('Origin not allowed by CORS');
+    const error = new Error('Request origin is not allowed.');
     error.status = 403;
+    error.code = 'CORS_ORIGIN_DENIED';
 
     return callback(error);
   },
@@ -54,9 +87,7 @@ const corsOptions = {
   methods: [
     'GET',
     'POST',
-    'PUT',
     'PATCH',
-    'DELETE',
     'OPTIONS',
   ],
 
@@ -67,34 +98,16 @@ const corsOptions = {
   ],
 
   credentials: true,
+
   optionsSuccessStatus: 204,
 };
 
+// Apply CORS only once.
 app.use(cors(corsOptions));
 
-
-app.disable('x-powered-by');
-
-app.use(helmet());
-
-app.use(
-  cors({
-    origin(origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-
-      const error = new Error('Origin not allowed');
-      error.status = 403;
-      callback(error);
-    },
-
-    methods: ['GET', 'POST', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'X-CSRF-Token'],
-    credentials: true,
-    optionsSuccessStatus: 204,
-  })
-);
+// ==========================================
+// BODY PARSER
+// ==========================================
 
 app.use(
   express.json({
@@ -103,6 +116,22 @@ app.use(
     type: 'application/json',
   })
 );
+
+// ==========================================
+// ROOT ENDPOINT
+// ==========================================
+
+app.get('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'DAN IT CONSULTANCY SERVICE Backend API',
+    status: 'Running',
+  });
+});
+
+// ==========================================
+// HEALTH CHECK
+// ==========================================
 
 app.get('/api/health', (req, res) => {
   const connected = mongoose.connection.readyState === 1;
@@ -115,35 +144,57 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Public contact form — no admin session required.
+// ==========================================
+// PUBLIC CONTACT API
+// ==========================================
+
 app.use('/api/contact', contactRoutes);
 
-// Session middleware only for private admin APIs.
+// ==========================================
+// ADMIN SESSION
+// ==========================================
+
 app.use('/api/admin', createSessionMiddleware());
 
+// ==========================================
+// ADMIN APIs
+// ==========================================
+
 app.use('/api/admin/auth', authRoutes);
+
 app.use('/api/admin', adminRoutes);
+
+// ==========================================
+// ERROR HANDLING
+// ==========================================
 
 app.use(notFound);
 
 app.use((err, req, res, next) => {
-  if (err.status === 403) {
+  if (err.code === 'CORS_ORIGIN_DENIED') {
     return res.status(403).json({
       success: false,
       message: 'Request origin is not allowed.',
+      code: 'CORS_ORIGIN_DENIED',
     });
   }
 
-  errorHandler(err, req, res, next);
+  return errorHandler(err, req, res, next);
 });
+
+// ==========================================
+// START SERVER
+// ==========================================
 
 async function startServer() {
   try {
     await connectDB();
 
     app.listen(PORT, '0.0.0.0', () => {
+      console.log('================================');
       console.log(`Backend running on port ${PORT}`);
       console.log(`Environment: ${process.env.NODE_ENV}`);
+      console.log('================================');
     });
 
   } catch (error) {
