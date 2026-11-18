@@ -1,0 +1,566 @@
+
+@use './variables' as *;
+
+.portfolio_section {
+  position: relative;
+  padding: 120px 0;
+  background: $bg;
+  overflow: hidden;
+  isolation: isolate;
+
+  .container {
+    position: relative;
+    z-index: 1;
+  }
+
+  .portfolio_glow {
+    position: absolute;
+    top: 15%;
+    left: -250px;
+    width: 550px;
+    height: 550px;
+    border-radius: 50%;
+    background: rgba(109, 40, 217, 0.11);
+    filter: blur(90px);
+    pointer-events: none;
+  }
+
+  // HEADER
+
+  .portfolio_header {
+    max-width: 760px;
+    margin: 0 auto 45px;
+    text-align: center;
+  }
+
+  .portfolio_chip {
+    margin-bottom: 25px;
+    color: $accent;
+    font-size: 11px;
+    letter-spacing: 1.4px;
+    border: 1px solid rgba(196, 181, 253, 0.2);
+    background: rgba(139, 92, 246, 0.1);
+
+    .MuiChip-icon {
+      color: $accent;
+    }
+  }
+
+  .portfolio_heading {
+    font-size: clamp(36px, 4.5vw, 62px);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.045em;
+
+    span {
+      background: linear-gradient(110deg, #c4b5fd, #8b5cf6, #e9d5ff);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+
+  .portfolio_intro {
+    max-width: 630px;
+    margin: 22px auto 0;
+    color: $muted;
+    font-size: 14px;
+    line-height: 1.9;
+  }
+
+  // FILTERS
+
+  .portfolio_filters {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 45px;
+  }
+
+  .portfolio_filter {
+    border-radius: 50px;
+    padding: 10px 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    color: $muted;
+    border: 1px solid $border;
+    background: rgba(255, 255, 255, 0.02);
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: white;
+      border-color: $primary;
+      background: rgba(139, 92, 246, 0.12);
+    }
+
+    &.active {
+      color: white;
+      background: $primary;
+      border-color: $primary;
+      box-shadow: 0 8px 28px rgba(139, 92, 246, 0.22);
+    }
+  }
+
+  // GRID AND CARDS
+
+  .portfolio_grid_item {
+    display: flex;
+    min-width: 0;
+  }
+
+  .portfolio_card {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 20px;
+    border: 1px solid rgba(196, 181, 253, 0.12);
+    background: linear-gradient(145deg, #171321, #100d19);
+    box-shadow: none;
+    transition:
+      border-color 0.35s ease,
+      box-shadow 0.35s ease;
+
+    &:hover {
+      border-color: rgba(139, 92, 246, 0.55);
+      box-shadow: 0 20px 50px rgba(93, 42, 160, 0.15);
+
+      .portfolio_image {
+        transform: scale(1.07);
+      }
+
+      .portfolio_overlay {
+        opacity: 1;
+      }
+
+      .portfolio_view_btn {
+        transform: translateY(0);
+      }
+
+      .portfolio_details_link .MuiButton-endIcon {
+        transform: translateX(4px);
+      }
+    }
+  }
+
+  .portfolio_image_wrapper {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+    background: #21182e;
+  }
+
+  .portfolio_image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+
+  .portfolio_type {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    z-index: 2;
+    height: 28px;
+    font-size: 10px;
+    font-weight: 700;
+    backdrop-filter: blur(12px);
+
+    &.concept_type {
+      background: rgba(24, 18, 38, 0.88);
+      color: #d8c8ff;
+      border: 1px solid rgba(196, 181, 253, 0.25);
+    }
+
+    &.client_type {
+      background: rgba(15, 65, 48, 0.9);
+      color: #a7f3d0;
+      border: 1px solid rgba(110, 231, 183, 0.3);
+    }
+  }
+
+  .portfolio_overlay {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    opacity: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(8, 7, 13, 0.08),
+      rgba(8, 7, 13, 0.8)
+    );
+    transition: opacity 0.35s ease;
+  }
+
+  .portfolio_view_btn {
+    transform: translateY(15px);
+    transition: transform 0.35s ease;
+  }
+
+  .portfolio_card_body {
+    display: flex;
+    flex-direction: column;
+    padding: 27px;
+    min-height: 265px;
+  }
+
+  .portfolio_meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 15px;
+
+    p {
+      color: $accent;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+    }
+
+    p:last-child {
+      color: $muted;
+    }
+  }
+
+  .portfolio_card_title {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.35;
+    margin-bottom: 12px;
+  }
+
+  .portfolio_card_description {
+    color: $muted;
+    font-size: 12px;
+    line-height: 1.85;
+    margin-bottom: 20px;
+  }
+
+  .portfolio_tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 22px;
+  }
+
+  .portfolio_tag {
+    color: #c9c1d7;
+    background: rgba(139, 92, 246, 0.08);
+    border: 1px solid $border;
+    font-size: 10px;
+  }
+
+  .portfolio_details_link {
+    align-self: flex-start;
+    margin-top: auto;
+    padding: 0;
+    color: $accent;
+    font-size: 12px;
+    font-weight: 600;
+
+    &:hover {
+      background: transparent;
+    }
+
+    .MuiButton-endIcon {
+      transition: transform 0.3s ease;
+    }
+  }
+
+  // BOTTOM CTA
+
+  .portfolio_bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 25px;
+    margin-top: 65px;
+    padding: 35px 40px;
+    border: 1px solid rgba(139, 92, 246, 0.22);
+    border-radius: 20px;
+    background:
+      radial-gradient(circle at right, rgba(139, 92, 246, 0.14), transparent 60%),
+      #151122;
+
+    h3 {
+      font-size: clamp(21px, 3vw, 29px);
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: $muted;
+      font-size: 13px;
+    }
+
+    .MuiButton-root {
+      padding: 13px 25px;
+    }
+  }
+}
+
+// SCROLL REVEAL FOR FILTERED CARDS
+
+@media (prefers-reduced-motion: no-preference) {
+  .portfolio_card[data-portfolio-reveal] {
+    opacity: 0;
+    transform: translateY(30px);
+    transition:
+      opacity 0.6s ease,
+      transform 0.6s ease,
+      border-color 0.35s ease,
+      box-shadow 0.35s ease;
+    transition-delay: var(--card-delay, 0ms);
+  }
+
+  .portfolio_card[data-portfolio-reveal].is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// PROJECT MODAL
+
+.portfolio_dialog {
+  .MuiDialog-paper {
+    background: #12101c;
+    color: $text;
+    border: 1px solid rgba(196, 181, 253, 0.2);
+    border-radius: 22px;
+    overflow: hidden;
+  }
+
+  .portfolio_dialog_content {
+    position: relative;
+    padding: 0;
+  }
+
+  .portfolio_close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 5;
+    background: rgba(8, 7, 13, 0.85);
+    color: white;
+
+    &:hover {
+      background: $primary;
+    }
+  }
+
+  .dialog_image_wrapper {
+    width: 100%;
+    max-height: 380px;
+    overflow: hidden;
+    background: #21182e;
+  }
+
+  .dialog_image {
+    width: 100%;
+    max-height: 380px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .dialog_body {
+    padding: 35px;
+  }
+
+  .dialog_badges {
+    margin-bottom: 20px;
+  }
+
+  .dialog_type {
+    color: $accent;
+    background: rgba(139, 92, 246, 0.15);
+  }
+
+  .dialog_title {
+    font-size: clamp(25px, 3vw, 36px);
+    font-weight: 800;
+    margin-bottom: 15px;
+  }
+
+  .dialog_description,
+  .dialog_text {
+    color: $muted;
+    font-size: 13px;
+    line-height: 1.9;
+  }
+
+  .dialog_divider {
+    margin: 28px 0;
+    border-color: $border;
+  }
+
+  .dialog_details_grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 30px;
+  }
+
+  .dialog_label {
+    color: $accent;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    margin-bottom: 13px;
+  }
+
+  .dialog_services {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 30px;
+  }
+
+  .dialog_service {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    svg {
+      color: $primary;
+      font-size: 19px;
+      flex-shrink: 0;
+    }
+
+    p {
+      color: #d2cbdc;
+      font-size: 12px;
+    }
+  }
+
+  .dialog_technologies {
+    margin-bottom: 30px;
+  }
+
+  .dialog_tech {
+    background: rgba(139, 92, 246, 0.12);
+    color: $accent;
+    border: 1px solid $border;
+  }
+
+  .dialog_actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+}
+
+// TABLET
+
+@media (max-width: 960px) {
+  .portfolio_section {
+    padding: 90px 0;
+
+    .portfolio_card_body {
+      padding: 23px;
+    }
+  }
+}
+
+// MOBILE
+
+@media (max-width: 600px) {
+  .portfolio_section {
+    padding: 75px 0;
+
+    .portfolio_header {
+      margin-bottom: 30px;
+    }
+
+    .portfolio_heading {
+      font-size: 35px;
+    }
+
+    .portfolio_intro {
+      font-size: 13px;
+    }
+
+    .portfolio_filters {
+      gap: 8px;
+      margin-bottom: 30px;
+    }
+
+    .portfolio_filter {
+      padding: 8px 13px;
+      font-size: 11px;
+    }
+
+    .portfolio_card_body {
+      min-height: auto;
+    }
+
+    .portfolio_overlay {
+      opacity: 1;
+      align-items: end;
+      padding-bottom: 20px;
+      background: linear-gradient(
+        180deg,
+        transparent 40%,
+        rgba(8, 7, 13, 0.65)
+      );
+    }
+
+    .portfolio_view_btn {
+      transform: none;
+    }
+
+    .portfolio_bottom {
+      margin-top: 45px;
+      padding: 28px 23px;
+    }
+  }
+
+  .portfolio_dialog {
+    .dialog_body {
+      padding: 25px 20px;
+    }
+
+    .dialog_details_grid,
+    .dialog_services {
+      grid-template-columns: 1fr;
+    }
+
+    .dialog_actions {
+      flex-direction: column;
+
+      .MuiButton-root {
+        width: 100%;
+      }
+    }
+  }
+}
+
+@media (hover: none) {
+  .portfolio_section {
+    .portfolio_overlay {
+      opacity: 1;
+    }
+
+    .portfolio_view_btn {
+      transform: none;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio_section {
+    .portfolio_card,
+    .portfolio_image,
+    .portfolio_overlay,
+    .portfolio_view_btn {
+      transition: none;
+    }
+
+    .portfolio_card[data-portfolio-reveal] {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}

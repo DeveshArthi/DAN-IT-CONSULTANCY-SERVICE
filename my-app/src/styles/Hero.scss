@@ -1,0 +1,189 @@
+
+@use './variables' as *;
+
+.hero {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  isolation: isolate;
+  padding: 145px 0 90px;
+  background: $bg;
+
+  .hero_container {
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero_content {
+    max-width: 900px;
+    animation: heroFade 0.9s ease both;
+  }
+
+  .hero_chip {
+    border: 1px solid rgba(196, 181, 253, 0.25);
+    background: rgba(139, 92, 246, 0.09);
+    color: $accent;
+    font-size: 11px;
+    letter-spacing: 1.3px;
+    margin-bottom: 30px;
+
+    .MuiChip-icon {
+      color: $accent;
+      font-size: 17px;
+    }
+  }
+
+  .hero_title {
+    font-size: clamp(42px, 6.4vw, 90px);
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -0.055em;
+
+    span {
+      background: linear-gradient(
+        110deg,
+        #c4b5fd,
+        #8b5cf6,
+        #e9d5ff
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+
+  .hero_description {
+    max-width: 610px;
+    margin-top: 28px;
+    color: $muted;
+    font-size: 16px;
+    line-height: 1.9;
+  }
+
+  .hero_actions {
+    gap: 16px;
+    margin-top: 38px;
+    flex-wrap: wrap;
+
+    .MuiButton-root {
+      min-height: 52px;
+      padding: 12px 26px;
+    }
+
+    .MuiButton-outlined {
+      border-color: rgba(196, 181, 253, 0.3);
+      color: $text;
+
+      &:hover {
+        border-color: $primary;
+        background: rgba(139, 92, 246, 0.08);
+      }
+    }
+  }
+
+  .hero_specialties {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    margin-top: 65px;
+  }
+
+  .specialty {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: $muted;
+
+    svg {
+      color: $accent;
+      font-size: 21px;
+    }
+
+    p {
+      font-size: 12px;
+    }
+  }
+
+  .hero_glow {
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+    border-radius: 50%;
+    filter: blur(75px);
+  }
+
+  .hero_glow_one {
+    width: 540px;
+    height: 540px;
+    right: -130px;
+    top: 10%;
+    background: rgba(109, 40, 217, 0.24);
+  }
+
+  .hero_glow_two {
+    width: 400px;
+    height: 400px;
+    right: 20%;
+    bottom: -250px;
+    background: rgba(139, 92, 246, 0.12);
+  }
+
+  .hero_grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0.16;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(139,92,246,0.15) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(139,92,246,0.15) 1px, transparent 1px);
+    background-size: 65px 65px;
+    mask-image: linear-gradient(to bottom, transparent, black, transparent);
+  }
+}
+
+@keyframes heroFade {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    min-height: 90svh;
+    padding: 140px 0 80px;
+
+    .hero_title {
+      font-size: clamp(38px, 9vw, 58px);
+    }
+
+    .hero_description {
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .hero_specialties {
+      gap: 18px;
+      margin-top: 45px;
+    }
+
+    .hero_glow_one {
+      width: 300px;
+      height: 300px;
+      right: -160px;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero_content {
+    animation: none;
+  }
+}

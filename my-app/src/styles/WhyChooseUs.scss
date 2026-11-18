@@ -1,0 +1,247 @@
+
+@use './variables' as *;
+
+.why_section {
+  position: relative;
+  padding: 120px 0;
+  background:
+    radial-gradient(
+      ellipse at 50% 100%,
+      rgba(109,40,217,0.08),
+      transparent 65%
+    ),
+    #0b0912;
+
+  .why_header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 50px;
+    margin-bottom: 55px;
+  }
+
+  .why_chip {
+    background: rgba(139,92,246,0.1);
+    border: 1px solid rgba(196,181,253,0.2);
+    color: $accent;
+    font-size: 11px;
+    letter-spacing: 1.4px;
+    margin-bottom: 25px;
+  }
+
+  .why_title {
+    font-size: clamp(34px, 4vw, 55px);
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.045em;
+
+    span {
+      background: linear-gradient(
+        110deg,
+        #c4b5fd,
+        #8b5cf6,
+        #e9d5ff
+      );
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+
+  .why_intro {
+    max-width: 330px;
+    color: $muted;
+    font-size: 14px;
+    line-height: 1.9;
+    flex-shrink: 0;
+  }
+
+  // GRID
+
+  .why_grid {
+    align-items: stretch;
+
+    > .MuiGrid-root {
+      display: flex;
+    }
+  }
+
+  .why_card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 320px;
+    overflow: hidden;
+    border-radius: 18px;
+    border: 1px solid rgba(196,181,253,0.10);
+    background: linear-gradient(
+      145deg,
+      #171321,
+      #100d19
+    );
+    box-shadow: none;
+    transition:
+      border-color 0.35s ease,
+      box-shadow 0.35s ease;
+
+    &:hover {
+      border-color: rgba(139,92,246,0.5);
+      box-shadow: 0 15px 40px rgba(93,42,160,0.12);
+
+      .why_icon {
+        background: $primary;
+        color: white;
+        transform: rotate(-5deg);
+      }
+
+      .why_card_line {
+        width: 100%;
+      }
+    }
+  }
+
+  .why_card_content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 28px !important;
+  }
+
+  .why_card_top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 38px;
+  }
+
+  .why_icon {
+    width: 58px;
+    height: 58px;
+    display: grid;
+    place-items: center;
+    border-radius: 15px;
+    background: rgba(139,92,246,0.12);
+    border: 1px solid rgba(139,92,246,0.2);
+    color: $accent;
+    transition: all 0.35s ease;
+
+    svg {
+      font-size: 27px;
+    }
+  }
+
+  .why_number {
+    color: rgba(196,181,253,0.18);
+    font-size: 32px;
+    font-weight: 800;
+  }
+
+  .why_card_title {
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.4;
+    margin-bottom: 16px;
+  }
+
+  .why_card_text {
+    color: $muted;
+    font-size: 12px;
+    line-height: 1.9;
+    margin-bottom: 25px;
+  }
+
+  .why_card_line {
+    width: 45px;
+    height: 2px;
+    margin-top: auto;
+    background: linear-gradient(
+      90deg,
+      $primary,
+      $accent
+    );
+    transition: width 0.4s ease;
+  }
+
+  // BOTTOM CTA
+
+  .why_bottom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 25px;
+    margin-top: 55px;
+
+    p {
+      color: $muted;
+      font-size: 14px;
+    }
+
+    .MuiButton-root {
+      padding: 12px 25px;
+    }
+  }
+}
+
+// TABLET
+
+@media (max-width: 1050px) {
+  .why_section {
+    .why_header {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .why_intro {
+      max-width: 650px;
+    }
+  }
+}
+
+// MOBILE
+
+@media (max-width: 600px) {
+  .why_section {
+    padding: 80px 0;
+
+    .why_header {
+      margin-bottom: 35px;
+    }
+
+    .why_title {
+      font-size: 34px;
+    }
+
+    .why_intro {
+      font-size: 13px;
+    }
+
+    .why_card {
+      min-height: auto;
+    }
+
+    .why_card_content {
+      padding: 25px !important;
+    }
+
+    .why_card_top {
+      margin-bottom: 28px;
+    }
+
+    .why_bottom {
+      text-align: center;
+      gap: 18px;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .why_section {
+    .why_card,
+    .why_icon,
+    .why_card_line {
+      transition: none;
+    }
+  }
+}

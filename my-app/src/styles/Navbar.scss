@@ -1,0 +1,120 @@
+@use './variables' as *;
+
+.navbar {
+    width: 100%;
+    background: transparent !important;
+    border-bottom: 1px solid transparent;
+    transition: background 0.3s ease,
+        border-color 0.3s ease;
+
+    &.scrolled {
+        background: rgba(8, 7, 13, 0.88) !important;
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        border-color: $border;
+    }
+
+    .navbar_inner {
+       
+        gap: 24px;
+        width: 100%;
+        min-height: 82px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-shrink: 0;
+    }
+
+    .brand_icon {
+        width: 43px;
+        height: 43px;
+        display: grid;
+        place-items: center;
+        border-radius: 12px;
+        background: linear-gradient(135deg, $primary, #5b21b6);
+        color: white;
+        font-size: 25px;
+        font-weight: 900;
+    }
+
+    .brand_name {
+        font-size: 20px;
+        font-weight: 900;
+        letter-spacing: 2px;
+        line-height: 1.1;
+    }
+
+    .brand_subtitle {
+        font-size: 8px;
+        font-weight: 600;
+        letter-spacing: 1.1px;
+        color: $muted;
+    }
+
+    .desktop_links {
+        display: flex;
+        align-items: center;
+    }
+
+    .nav_link {
+        color: $muted;
+        font-size: 13px;
+        font-weight: 500;
+        transition: color 0.25s ease;
+
+        &:hover {
+            color: $accent;
+        }
+    }
+
+    .nav_cta {
+        white-space: nowrap;
+        background: $primary;
+    }
+
+    .mobile_menu_btn {
+        display: none;
+        color: white;
+    }
+}
+
+.mobile_drawer {
+    width: min(320px, 85vw);
+    padding: 24px;
+    background: $surface !important;
+
+    .drawer_header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 32px;
+    }
+
+    .drawer_links {
+        .drawer_link {
+            justify-content: flex-start;
+            padding: 14px;
+            color: $text;
+        }
+    }
+}
+
+@media (max-width: 960px) {
+    .navbar {
+
+        .desktop_links,
+        .nav_cta {
+            display: none;
+        }
+
+        .mobile_menu_btn {
+            display: inline-flex;
+        }
+    }
+}
