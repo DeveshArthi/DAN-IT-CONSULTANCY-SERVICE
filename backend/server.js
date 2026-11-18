@@ -21,14 +21,57 @@ const {
 const app = express();
 const PORT = Number(process.env.PORT) || 5000;
 
-const allowedOrigins = (process.env.CLIENT_URLS || '')
+
+
+
+const allowedOrigins = (
+  process.env.CLIENT_URLS || ''
+)
   .split(',')
-  .map((value) => value.trim().replace(/\/$/, ''))
+  .map((origin) => origin.trim())
   .filter(Boolean);
 
-if (process.env.TRUST_PROXY === '1') {
-  app.set('trust proxy', 1);
-}
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow requests without an Origin header,
+    // such as backend health checks.
+    if (!origin) {
+      return callback(null, true);
+    }
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    console.error('CORS blocked origin:', origin);
+
+    const error = new Error('Origin not allowed by CORS');
+    error.status = 403;
+
+    return callback(error);
+  },
+
+  methods: [
+    'GET',
+    'POST',
+    'PUT',
+    'PATCH',
+    'DELETE',
+    'OPTIONS',
+  ],
+
+  allowedHeaders: [
+    'Content-Type',
+    'Authorization',
+    'X-CSRF-Token',
+  ],
+
+  credentials: true,
+  optionsSuccessStatus: 204,
+};
+
+app.use(cors(corsOptions));
+
 
 app.disable('x-powered-by');
 
