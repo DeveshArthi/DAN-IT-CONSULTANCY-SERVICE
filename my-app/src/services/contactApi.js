@@ -1,57 +1,23 @@
-
-const API_URL = import.meta.env.VITE_API_URL;
+const API_BASE = (
+  import.meta.env.VITE_API_URL || ''
+).replace(/\/$/, '');
 
 export async function submitContactForm(formData) {
-  if (!API_URL) {
+  const response = await fetch(`${API_BASE}/api/contact`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(formData),
+  });
+
+  const result = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
     throw new Error(
-      'The contact service is not configured yet. Please contact us directly by email.'
+      result.message || 'Unable to submit your enquiry.'
     );
   }
 
-  const controller = new AbortController();
-
-  const timeout = setTimeout(() => {
-    controller.abort();
-  }, 15000);
-
-  try {
-    const response = await fetch(
-      `${API_URL.replace(/\/$/, '')}/api/contact`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-        signal: controller.signal,
-      }
-    );
-
-    let result = {};
-
-    try {
-      result = await response.json();
-    } catch {
-      // Handle non-JSON responses.
-    }
-
-    if (!response.ok) {
-      throw new Error(
-        result.message ||
-        'Unable to send your enquiry. Please try again.'
-      );
-    }
-
-    return result;
-  } catch (error) {
-    if (error.name === 'AbortError') {
-      throw new Error(
-        'The request timed out. Please try again.'
-      );
-    }
-
-    throw error;
-  } finally {
-    clearTimeout(timeout);
-  }
+  return result;
 }
